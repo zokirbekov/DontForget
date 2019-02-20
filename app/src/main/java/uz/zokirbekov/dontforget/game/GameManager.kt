@@ -73,8 +73,8 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
 
     fun rotate(toward:Int)
     {
-        game?.rotate(toward)
-        mapOfImages = RotateManager.rotate(mapOfImages!!,toward)
+        game?.map = RotateManager.rotate(game?.map!!.copy(),game?.map!!,toward)
+        mapOfImages = RotateManager.rotate(mapOfImages!!.copy(),mapOfImages!!,toward)
         setTagToImages()
         AnimationManager.animate(grid,toward)
     }
@@ -85,7 +85,6 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
         {
             for (j in 0..size - 1)
             {
-
                 mapOfImages!![i][j]?.tag = Point(i,j)
             }
         }
@@ -184,6 +183,8 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
             gameOver()
         }
     }
+
+    private inline fun <reified T> Array<Array<T>>.copy() = map { it.clone() }.toTypedArray()
 
     class Point(val i:Int,val j:Int)
 

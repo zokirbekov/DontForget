@@ -10,11 +10,6 @@ class Game(val size:Int) {
 
     }
 
-    fun rotate(tower:Int)
-    {
-        map = RotateManager.rotate(map!!,tower)
-    }
-
     init {
         initMap(size)
     }

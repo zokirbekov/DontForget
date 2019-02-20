@@ -14,6 +14,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         grid = findViewById(R.id.grid)
 
-        GameManager(4,grid!!).newGame()
+        GameManager(3,grid!!).newGame()
     }
 }
