@@ -3,6 +3,7 @@ package uz.zokirbekov.dontforget.game
 import android.graphics.Color
 import android.media.Image
 import android.opengl.Visibility
+import android.os.Build
 import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.support.v7.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import uz.zokirbekov.dontforget.R
 import uz.zokirbekov.dontforget.util.AnimationManager
 import uz.zokirbekov.dontforget.util.RandomManager
 import uz.zokirbekov.dontforget.util.RotateManager
@@ -144,6 +146,13 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
             {
                 val imageView = ImageView(grid.context)
                 imageView.setBackgroundColor(GRAY_COLOR)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    imageView.background = grid.context.getDrawable(R.drawable.round_border)
+                }
+                else
+                {
+                    imageView.background = grid.context.resources.getDrawable(R.drawable.round_border)
+                }
                 //imageView.setText("$i $j")
                 val params = GridLayout.LayoutParams()
                 params.width = 100
