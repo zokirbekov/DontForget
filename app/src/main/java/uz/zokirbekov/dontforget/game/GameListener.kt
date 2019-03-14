@@ -3,7 +3,7 @@ package uz.zokirbekov.dontforget.game
 import android.view.View
 
 interface GameListener {
-    fun onStart()
+    fun onStartGame()
     fun onNextStep()
     fun onFinish()
 }

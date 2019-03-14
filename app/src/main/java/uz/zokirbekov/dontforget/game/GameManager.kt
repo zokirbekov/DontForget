@@ -2,23 +2,26 @@ package uz.zokirbekov.dontforget.game
 
 import android.graphics.Color
 import android.media.Image
+import android.opengl.Visibility
 import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
 import android.support.v7.widget.GridLayout
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import uz.zokirbekov.dontforget.util.AnimationManager
 import uz.zokirbekov.dontforget.util.RandomManager
 import uz.zokirbekov.dontforget.util.RotateManager
 
-class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
+class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     var gameListener:GameListener? = null
     var game:Game? = null
     var mapOfImages:Array<Array<ImageView?>>? = null
 
     private var clickedCount:Int = 0
-    private var count:Int = 0
+    var count:Int = 0
 
     companion object {
         private val GRAY_COLOR = Color.GRAY
@@ -34,7 +37,8 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
     {
         game?.initMap(size)
         initImages()
-        gameListener?.onStart()
+        setTagToImages()
+        gameListener?.onStartGame()
         nextStep()
         return this
     }
@@ -49,8 +53,8 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
         grid.isEnabled = false
         showTrues()
         handler.postDelayed(
-                {hideTrues()
-                 grid.isEnabled = true
+                {   hideTrues()
+                    grid.isEnabled = true
                 },2*300*size.toLong() + 100)
         gameListener?.onNextStep()
     }
@@ -73,10 +77,10 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
 
     fun rotate(toward:Int)
     {
-        game?.map = RotateManager.rotate(game?.map!!.copy(),game?.map!!,toward)
-        mapOfImages = RotateManager.rotate(mapOfImages!!.copy(),mapOfImages!!,toward)
-        setTagToImages()
-        AnimationManager.animate(grid,toward)
+        //game?.map = RotateManager.rotate(game?.map!!.copy(),game?.map!!,toward)
+        //mapOfImages = RotateManager.rotate(mapOfImages!!.copy(),mapOfImages!!,toward)
+        //setTagToImages()
+        //AnimationManager.animate(grid,toward)
     }
 
     fun setTagToImages()
@@ -120,7 +124,7 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
                     handler.postDelayed(
                             {
                                 mapOfImages!![i][j]?.setBackgroundColor(GRAY_COLOR)
-                            }, 300*j.toLong() + 300*i.toLong())
+                            }, 30*j.toLong() + 30*i.toLong())
                 }
     }
 
@@ -129,12 +133,18 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
         grid.removeAllViews()
         grid.columnCount = size
         grid.rowCount = size
+
+//        grid2.removeAllViews()
+//        grid2.columnCount = size
+//        grid2.rowCount = size
+
         for (i in 0..size - 1)
         {
             for (j in 0..size - 1)
             {
                 val imageView = ImageView(grid.context)
                 imageView.setBackgroundColor(GRAY_COLOR)
+                //imageView.setText("$i $j")
                 val params = GridLayout.LayoutParams()
                 params.width = 100
                 params.height = 100
@@ -142,6 +152,7 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
                 imageView.setOnClickListener(this)
                 mapOfImages!![i][j] = imageView
                 grid.addView(imageView,params)
+                //grid2.addView(imageView,params)
             }
         }
     }
@@ -156,7 +167,6 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
         }while (checkPlace(i,j))
 
         game?.map!![i][j] = true
-        mapOfImages!![i][j]?.setBackgroundColor(YELLOW_COLOR)
     }
 
     private fun checkPlace(i:Int,j:Int) : Boolean
@@ -172,6 +182,7 @@ class GameManager(val size:Int,val grid: GridLayout) : View.OnClickListener{
     override fun onClick(v: View?) {
         val imageView = v as? ImageView
         val point =  v?.tag as Point
+        //Toast.makeText(grid.context, "${point.i} ${point.j}", Toast.LENGTH_LONG).show()
         if (checkPlace(point)) {
             imageView?.setBackgroundColor(YELLOW_COLOR)
             clickedCount++
