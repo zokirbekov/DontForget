@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DontForget</string>
+    <string name="creator">created by Zokirbekov</string>
+    <string name="demo">Demo</string>
 </resources>

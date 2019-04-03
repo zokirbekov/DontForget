@@ -191,7 +191,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
     override fun onClick(v: View?) {
         val imageView = v as? ImageView
         val point =  v?.tag as Point
-        //Toast.makeText(grid.context, "${point.i} ${point.j}", Toast.LENGTH_LONG).show()
+        Toast.makeText(grid.context, "${point.i} ${point.j}", Toast.LENGTH_LONG).show()
         if (checkPlace(point)) {
             imageView?.setBackgroundColor(YELLOW_COLOR)
             clickedCount++
