@@ -1,16 +1,22 @@
 package uz.zokirbekov.dontforget.game
 
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.media.Image
 import android.opengl.Visibility
 import android.os.Build
 import android.os.Handler
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.widget.AppCompatImageView
 import android.view.View
 import android.view.ViewGroup
 import android.support.v7.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+
 import uz.zokirbekov.dontforget.R
 import uz.zokirbekov.dontforget.util.AnimationManager
 import uz.zokirbekov.dontforget.util.RandomManager
@@ -20,19 +26,17 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     var gameListener:GameListener? = null
     var game:Game? = null
-    var mapOfImages:Array<Array<ImageView?>>? = null
+    var mapOfImages:Array<Array<AppCompatImageView?>>? = null
 
     private var clickedCount:Int = 0
     var count:Int = 0
 
-    companion object {
-        private val GRAY_COLOR = Color.GRAY
-        private val YELLOW_COLOR = Color.YELLOW
-    }
+    private val GRAY_COLOR = ContextCompat.getColor(grid.context,R.color.colorLightColor)
+    private val YELLOW_COLOR = Color.YELLOW
 
     init {
         game = Game(size)
-        mapOfImages = Array(size, {Array<ImageView?>(size, { null })})
+        mapOfImages = Array(size, {Array<AppCompatImageView?>(size, { null })})
     }
 
     fun newGame() : GameManager
@@ -100,8 +104,9 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
     {
         for (i in 0..size - 1)
             for (j in 0..size - 1)
-                if (checkPlace(i,j))
-                    mapOfImages!![i][j]?.setBackgroundColor(YELLOW_COLOR)
+                if (checkPlace(i,j)) {
+                    setTint(mapOfImages!![i][j]!!, YELLOW_COLOR)
+                }
     }
 
     fun showTrues()
@@ -112,8 +117,8 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
                 if (checkPlace(i,j)) {
                     handler.postDelayed(
                             {
-                                mapOfImages!![i][j]?.setBackgroundColor(YELLOW_COLOR)
-                            }, 300*j.toLong() + 300*i.toLong())
+                                setTint(mapOfImages!![i][j]!!, YELLOW_COLOR)
+                            }, 30*j.toLong() + 30*i.toLong())
                 }
     }
 
@@ -125,9 +130,15 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
                 if (checkPlace(i,j)) {
                     handler.postDelayed(
                             {
-                                mapOfImages!![i][j]?.setBackgroundColor(GRAY_COLOR)
+                                setTint(mapOfImages!![i][j]!!, GRAY_COLOR)
                             }, 30*j.toLong() + 30*i.toLong())
                 }
+    }
+
+    private fun setTint(imageView: AppCompatImageView,color:Int)
+    {
+        var drawable = imageView.background
+        DrawableCompat.setTint(drawable!!, color)
     }
 
     private fun initImages()
@@ -144,7 +155,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         {
             for (j in 0..size - 1)
             {
-                val imageView = ImageView(grid.context)
+                val imageView = AppCompatImageView(grid.context)
                 imageView.setBackgroundColor(GRAY_COLOR)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     imageView.background = grid.context.getDrawable(R.drawable.round_border)
@@ -193,7 +204,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         val point =  v?.tag as Point
         Toast.makeText(grid.context, "${point.i} ${point.j}", Toast.LENGTH_LONG).show()
         if (checkPlace(point)) {
-            imageView?.setBackgroundColor(YELLOW_COLOR)
+            imageView?.setColorFilter(YELLOW_COLOR)
             clickedCount++
             if (clickedCount == count)
                 nextStep()
