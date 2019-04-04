@@ -61,7 +61,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         handler.postDelayed(
                 {   hideTrues()
                     grid.isEnabled = true
-                },2*300*size.toLong() + 100)
+                },2*40*size.toLong() + 100)
         gameListener?.onNextStep()
     }
 
