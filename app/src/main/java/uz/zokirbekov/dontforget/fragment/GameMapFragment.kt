@@ -39,7 +39,6 @@ class GameMapFragment : Fragment(), GameListener {
     fun onClick()
     {
         game.newGame()
-        ObjectAnimator.ofFloat(grid, View.ROTATION, 0f, 90f).start()
     }
 
     lateinit var game: GameManager

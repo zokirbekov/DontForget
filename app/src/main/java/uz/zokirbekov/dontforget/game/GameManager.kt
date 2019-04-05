@@ -86,7 +86,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         //game?.map = RotateManager.rotate(game?.map!!.copy(),game?.map!!,toward)
         //mapOfImages = RotateManager.rotate(mapOfImages!!.copy(),mapOfImages!!,toward)
         //setTagToImages()
-        //AnimationManager.animate(grid,toward)
+        AnimationManager.animate(grid,toward)
     }
 
     fun setTagToImages()
