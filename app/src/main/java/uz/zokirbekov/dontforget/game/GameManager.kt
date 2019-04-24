@@ -8,6 +8,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.GridLayout
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import uz.zokirbekov.dontforget.R
 import uz.zokirbekov.dontforget.util.AnimationManager
 import uz.zokirbekov.dontforget.util.RandomManager
@@ -230,6 +231,12 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
                 setTint(imageView!!, YELLOW_COLOR)
                 clickedCount++
                 if (clickedCount == count) {
+                    if (count == size*size)
+                    {
+                        Toast.makeText(grid.context, "Conguralations you win !!!",Toast.LENGTH_LONG).show()
+                        gameOver()
+                        return
+                    }
                     nextStep()
                 }
             }
