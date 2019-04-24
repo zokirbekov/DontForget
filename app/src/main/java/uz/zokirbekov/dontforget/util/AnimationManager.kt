@@ -1,22 +1,26 @@
 package uz.zokirbekov.dontforget.util
 
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import uz.zokirbekov.dontforget.R
 
 class AnimationManager {
     companion object {
         var currentDagree:Float = 0f;
         private val animInterval = 1000L
+        private var currentAnimator:ObjectAnimator? = null
         private fun newObjectAnimator(v:View?,fDagree:Float,tDagree:Float) : ObjectAnimator
         {
             var anim = ObjectAnimator.ofFloat(v, View.ROTATION, fDagree,tDagree)
             anim.duration = animInterval
+            currentAnimator = anim
             return anim
         }
+
+        fun cancelAnimation()
+        {
+            currentAnimator?.cancel()
+        }
+
         fun animate(v: View?,tower:Int)
         {
             when(tower) {
@@ -39,10 +43,5 @@ class AnimationManager {
                 else -> return
             }
         }
-        fun checkDagree(dagree:Float)
-        {
-
-        }
-
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient android:startColor="@color/colorAccent"
-        android:endColor="@color/colorPrimary"/>
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/gradient_enable" android:state_enabled="true"/>
+    <item android:drawable="@drawable/gradient_disable" android:state_enabled="false"/>
+    <item android:drawable="@drawable/round_border"/>
+</selector>

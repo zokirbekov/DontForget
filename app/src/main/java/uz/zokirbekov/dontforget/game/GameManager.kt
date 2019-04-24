@@ -1,22 +1,13 @@
 package uz.zokirbekov.dontforget.game
 
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.media.Image
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v7.widget.AppCompatImageView
-import android.view.View
-import android.view.ViewGroup
 import android.support.v7.widget.GridLayout
+import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-
 import uz.zokirbekov.dontforget.R
 import uz.zokirbekov.dontforget.util.AnimationManager
 import uz.zokirbekov.dontforget.util.RandomManager
@@ -26,8 +17,9 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     var gameListener:GameListener? = null
     var game:Game? = null
-    var mapOfImages:Array<Array<AppCompatImageView?>>? = null
+    var mapOfImages:MutableList<MutableList<ImageView?>>? = null
 
+    private var isFirstTime:Boolean = true
     private var clickedCount:Int = 0
     var count:Int = 0
 
@@ -36,17 +28,26 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     init {
         game = Game(size)
-        mapOfImages = Array(size, {Array<AppCompatImageView?>(size, { null })})
+        mapOfImages = MutableList(size, {MutableList<ImageView?>(size, { null })})
     }
 
     fun newGame() : GameManager
     {
+        AnimationManager.cancelAnimation()
         game?.initMap(size)
-        initImages()
-        setTagToImages()
+        if (isFirstTime) {
+            initImages()
+            setTagToImages()
+        }
+        else
+        {
+            enableOnClick()
+            allInGray()
+        }
         gameListener?.onStartGame()
         count = 0
         clickedCount = 0
+        isFirstTime = false
         nextStep()
         return this
     }
@@ -58,10 +59,10 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         showTrues()
         count++
         clickedCount = 0
-        grid.isEnabled = false
+
         handler.postDelayed(
-                {   hideTrues()
-                    grid.isEnabled = true
+                {
+                    hideTrues()
                 },2*100*size.toLong() + 100)
         handler.postDelayed(
                 {
@@ -87,11 +88,15 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
                 j?.setOnClickListener(null)
     }
 
+    private fun enableOnClick()
+    {
+        for (i in mapOfImages!!)
+            for (j in i)
+                j?.setOnClickListener(this)
+    }
+
     fun rotate(toward:Int)
     {
-        //game?.map = RotateManager.rotate(game?.map!!.copy(),game?.map!!,toward)
-        //mapOfImages = RotateManager.rotate(mapOfImages!!.copy(),mapOfImages!!,toward)
-        //setTagToImages()
         AnimationManager.animate(grid,toward)
     }
 
@@ -137,14 +142,25 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
                     handler.postDelayed(
                             {
                                 setTint(mapOfImages!![i][j]!!, GRAY_COLOR)
+                                clickedTo(false, mapOfImages!![i][j])
                             }, 100*j.toLong() + 100*i.toLong())
                 }
     }
 
-    private fun setTint(imageView: AppCompatImageView,color:Int)
+    private fun setTint(imageView: ImageView,color:Int)
     {
         var drawable = imageView.background
         DrawableCompat.setTint(drawable!!, color)
+    }
+
+    private fun allInGray()
+    {
+        for (i in 0..size - 1) {
+            for (j in 0..size - 1) {
+                setTint(mapOfImages!![i][j]!!,GRAY_COLOR)
+            }
+
+        }
     }
 
     private fun initImages()
@@ -157,7 +173,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         {
             for (j in 0..size - 1)
             {
-                val imageView = AppCompatImageView(grid.context)
+                var imageView = ImageView(grid.context)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     imageView.background = grid.context.getDrawable(R.drawable.round_border)
                 }
@@ -173,7 +189,6 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
                 imageView.setOnClickListener(this)
                 mapOfImages!![i][j] = imageView
                 grid.addView(imageView,params)
-                //grid2.addView(imageView,params)
             }
         }
     }
@@ -197,18 +212,26 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     private fun checkPlace(point:Point) : Boolean
     {
-        return game?.map!![point.i][point.j]
+        return checkPlace(point.i,point.j)
+    }
+
+    private fun clickedTo(b: Boolean,v: ImageView?)
+    {
+        val point =  v?.tag as Point
+        point.isClicked = b
     }
 
     override fun onClick(v: View?) {
-        val imageView = v as? AppCompatImageView
+        val imageView = v as? ImageView
         val point =  v?.tag as Point
-        if (checkPlace(point) && !point.isClicked) {
-            point.isClicked = true
-            setTint(imageView!!,YELLOW_COLOR)
-            clickedCount++
-            if (clickedCount == count) {
-                nextStep()
+        if (checkPlace(point)) {
+            if (!point.isClicked) {
+                point.isClicked = true
+                setTint(imageView!!, YELLOW_COLOR)
+                clickedCount++
+                if (clickedCount == count) {
+                    nextStep()
+                }
             }
         }
         else

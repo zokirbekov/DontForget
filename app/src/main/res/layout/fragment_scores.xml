@@ -8,7 +8,7 @@
         android:id="@+id/button_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_button"
+        android:background="@drawable/gradient_enable"
         android:text="Back"
         android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
