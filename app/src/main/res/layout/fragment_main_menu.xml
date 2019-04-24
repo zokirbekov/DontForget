@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/round_border_for_button"
             android:text="Scores"
+            android:layout_marginTop="16dp"
             android:textColor="@color/colorWhite" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

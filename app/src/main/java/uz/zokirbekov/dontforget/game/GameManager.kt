@@ -45,6 +45,8 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         initImages()
         setTagToImages()
         gameListener?.onStartGame()
+        count = 0
+        clickedCount = 0
         nextStep()
         return this
     }
@@ -53,15 +55,19 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
     {
         val handler = Handler()
         randomValue()
-        rotate(RandomManager.randomNumber(RotateManager.COUNT_OF_ROTATE_TYPES))
+        showTrues()
         count++
         clickedCount = 0
         grid.isEnabled = false
-        showTrues()
         handler.postDelayed(
                 {   hideTrues()
                     grid.isEnabled = true
-                },2*40*size.toLong() + 100)
+                },2*100*size.toLong() + 100)
+        handler.postDelayed(
+                {
+                    rotate(RandomManager.randomNumber(RotateManager.COUNT_OF_ROTATE_TYPES))
+                },4*100*size.toLong() + 100)
+
         gameListener?.onNextStep()
     }
 
@@ -95,7 +101,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         {
             for (j in 0..size - 1)
             {
-                mapOfImages!![i][j]?.tag = Point(i,j)
+                mapOfImages!![i][j]?.tag = Point(i,j,false)
             }
         }
     }
@@ -118,7 +124,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
                     handler.postDelayed(
                             {
                                 setTint(mapOfImages!![i][j]!!, YELLOW_COLOR)
-                            }, 30*j.toLong() + 30*i.toLong())
+                            }, 100*j.toLong() + 100*i.toLong())
                 }
     }
 
@@ -131,7 +137,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
                     handler.postDelayed(
                             {
                                 setTint(mapOfImages!![i][j]!!, GRAY_COLOR)
-                            }, 30*j.toLong() + 30*i.toLong())
+                            }, 100*j.toLong() + 100*i.toLong())
                 }
     }
 
@@ -147,16 +153,11 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         grid.columnCount = size
         grid.rowCount = size
 
-//        grid2.removeAllViews()
-//        grid2.columnCount = size
-//        grid2.rowCount = size
-
         for (i in 0..size - 1)
         {
             for (j in 0..size - 1)
             {
                 val imageView = AppCompatImageView(grid.context)
-                imageView.setBackgroundColor(GRAY_COLOR)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     imageView.background = grid.context.getDrawable(R.drawable.round_border)
                 }
@@ -200,14 +201,15 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
     }
 
     override fun onClick(v: View?) {
-        val imageView = v as? ImageView
+        val imageView = v as? AppCompatImageView
         val point =  v?.tag as Point
-        Toast.makeText(grid.context, "${point.i} ${point.j}", Toast.LENGTH_LONG).show()
-        if (checkPlace(point)) {
-            imageView?.setColorFilter(YELLOW_COLOR)
+        if (checkPlace(point) && !point.isClicked) {
+            point.isClicked = true
+            setTint(imageView!!,YELLOW_COLOR)
             clickedCount++
-            if (clickedCount == count)
+            if (clickedCount == count) {
                 nextStep()
+            }
         }
         else
         {
@@ -217,6 +219,6 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     private inline fun <reified T> Array<Array<T>>.copy() = map { it.clone() }.toTypedArray()
 
-    class Point(val i:Int,val j:Int)
+    class Point(val i:Int,val j:Int, var isClicked:Boolean)
 
 }
