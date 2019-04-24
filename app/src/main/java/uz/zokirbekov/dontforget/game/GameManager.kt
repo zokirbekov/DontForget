@@ -1,10 +1,12 @@
 package uz.zokirbekov.dontforget.game
 
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.GridLayout
 import android.view.View
 import android.widget.ImageView
@@ -18,7 +20,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     var gameListener:GameListener? = null
     var game:Game? = null
-    var mapOfImages:MutableList<MutableList<ImageView?>>? = null
+    var mapOfImages:MutableList<MutableList<AppCompatImageView?>>? = null
 
     private var isFirstTime:Boolean = true
     private var clickedCount:Int = 0
@@ -29,7 +31,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     init {
         game = Game(size)
-        mapOfImages = MutableList(size, {MutableList<ImageView?>(size, { null })})
+        mapOfImages = MutableList(size, {MutableList<AppCompatImageView?>(size, { null })})
     }
 
     fun newGame() : GameManager
@@ -148,10 +150,16 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
                 }
     }
 
-    private fun setTint(imageView: ImageView,color:Int)
+    private fun setTint(imageView: AppCompatImageView,color:Int)
     {
         var drawable = imageView.background
-        DrawableCompat.setTint(drawable!!, color)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            DrawableCompat.setTint(drawable!!, color)
+        }
+        else
+        {
+            drawable.mutate().setColorFilter(color,PorterDuff.Mode.SRC_IN)
+        }
     }
 
     private fun allInGray()
@@ -174,7 +182,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         {
             for (j in 0..size - 1)
             {
-                var imageView = ImageView(grid.context)
+                var imageView = AppCompatImageView(grid.context)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     imageView.background = grid.context.getDrawable(R.drawable.round_border)
                 }
@@ -223,7 +231,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
     }
 
     override fun onClick(v: View?) {
-        val imageView = v as? ImageView
+        val imageView = v as? AppCompatImageView
         val point =  v?.tag as Point
         if (checkPlace(point)) {
             if (!point.isClicked) {
