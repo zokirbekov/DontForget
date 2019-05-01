@@ -13,17 +13,18 @@ class ScoresAdapter(context:Context,val scores:MutableList<Player>) : RecyclerVi
 {
     private var layoutInflater:LayoutInflater = LayoutInflater.from(context)
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): VH {
-        return VH(layoutInflater.inflate(R.layout.layout_score,parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val v = layoutInflater.inflate(R.layout.layout_score,parent,false)
+        return VH(v)
     }
 
     override fun getItemCount(): Int {
         return scores.size
     }
 
-    override fun onBindViewHolder(holder: VH?, position: Int) {
-        holder?.textName?.setText(scores[position].name)
-        holder?.textScore?.setText(scores[position].score)
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        holder.textName.text = scores.get(position).name
+        holder.textScore.text = scores.get(position).score.toString()
     }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)

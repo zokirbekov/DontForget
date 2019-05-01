@@ -79,9 +79,10 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
     {
         showTrueAnswers()
         disableOnClick()
+        gameListener?.onFinish()
         count = 0
         clickedCount = 0
-        gameListener?.onFinish()
+
     }
 
     private fun disableOnClick()

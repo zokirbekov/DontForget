@@ -27,12 +27,17 @@ class GameMapFragment : Fragment(), GameListener {
     }
 
     override fun onNextStep() {
-        scoreText?.setText("Your score is : ${game.count}")
+        scoreText.setText("Your score is : ${game.count}")
     }
 
     override fun onFinish() {
         Toast.makeText(context,"Game created by Zokirbekov", Toast.LENGTH_LONG).show()
         btnNewGame.isEnabled = true
+        val fragment = ScoreDialogFragment()
+        val bundle = Bundle()
+        bundle.putInt("score",game.count)
+        fragment.arguments = bundle
+        fragment.show(fragmentManager,"SCORE_DIALOG_FRAGMENT")
     }
 
     @OnClick(R.id.button_new_game)
@@ -43,8 +48,8 @@ class GameMapFragment : Fragment(), GameListener {
 
     lateinit var game: GameManager
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater?.inflate(R.layout.fragment_game_map, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = inflater.inflate(R.layout.fragment_game_map, container, false)
         ButterKnife.bind(this,v!!)
         game = GameManager(5,grid)
         game.gameListener = this

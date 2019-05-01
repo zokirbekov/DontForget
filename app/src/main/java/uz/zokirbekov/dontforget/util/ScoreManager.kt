@@ -24,13 +24,13 @@ class ScoreManager {
     private var preferences:SharedPreferences?= null
 
     private var _listOfScores:MutableList<Player>? = null
-    val listOfScores:MutableList<Player>
+    val listOfScores:MutableList<Player>?
         get() {
             getScoresFromPreferensec()
             if (_listOfScores == null)
                 _listOfScores = mutableListOf<Player>()
             _listOfScores!!.sortByDescending { x -> x.score}
-            return _listOfScores as MutableList<Player>
+            return _listOfScores
         }
 
     private fun getScoresFromPreferensec()
@@ -42,12 +42,14 @@ class ScoreManager {
 
     fun addScore(player:Player)
     {
+        if (_listOfScores == null)
+            _listOfScores = mutableListOf()
         _listOfScores?.add(player)
     }
 
     fun writeToPreferences()
     {
-        val json = Gson().toJson(listOfScores)
+        val json = Gson().toJson(_listOfScores)
         preferences?.edit()?.putString(scoresKey,json)?.apply()
     }
 

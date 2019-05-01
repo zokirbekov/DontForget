@@ -24,8 +24,8 @@ class MainMenuFragment : Fragment() {
         (activity as MainActivity).toFragment(ScoreFragment())
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater?.inflate(R.layout.fragment_main_menu,container,false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = inflater.inflate(R.layout.fragment_main_menu,container,false)
         ButterKnife.bind(this, v!!)
         return v
     }
