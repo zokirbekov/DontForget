@@ -184,11 +184,11 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
             {
                 var imageView = AppCompatImageView(grid.context)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    imageView.background = grid.context.getDrawable(R.drawable.round_border)
+                    imageView.background = grid.context.getDrawable(R.drawable.round_border_for_game)
                 }
                 else
                 {
-                    imageView.background = grid.context.resources.getDrawable(R.drawable.round_border)
+                    imageView.background = grid.context.resources.getDrawable(R.drawable.round_border_for_game)
                 }
                 //imageView.setText("$i $j")
                 val params = GridLayout.LayoutParams()
