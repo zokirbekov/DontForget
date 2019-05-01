@@ -1,16 +1,19 @@
 package uz.zokirbekov.dontforget.util
 
+import android.animation.AnimatorInflater
 import android.animation.ObjectAnimator
+import android.support.graphics.drawable.ArgbEvaluator
 import android.view.View
+import uz.zokirbekov.dontforget.R
 
 class AnimationManager {
 
-        var currentDagree:Float = 0f;
+        private var currentDagree:Float = 0f
         private val animInterval = 1000L
         private var currentAnimator:ObjectAnimator? = null
         private fun newObjectAnimator(v:View?,fDagree:Float,tDagree:Float) : ObjectAnimator
         {
-            var anim = ObjectAnimator.ofFloat(v, View.ROTATION, fDagree,tDagree)
+            val anim = ObjectAnimator.ofFloat(v, View.ROTATION, fDagree,tDagree)
             anim.duration = animInterval
             currentAnimator = anim
             return anim
@@ -42,5 +45,21 @@ class AnimationManager {
                 }
                 else -> return
             }
-    }
+        }
+        fun animateColor(v:View?,grayToYellow:Boolean)
+        {
+            if (grayToYellow) {
+                val objectAnimator = (AnimatorInflater.loadAnimator(v?.context, R.animator.gray_to_yellow) as ObjectAnimator)
+                objectAnimator.setTarget(v)
+                objectAnimator.setEvaluator(ArgbEvaluator())
+                objectAnimator.start()
+            }
+            else {
+                val objectAnimator = (AnimatorInflater.loadAnimator(v?.context, R.animator.yellow_to_gray) as ObjectAnimator)
+                objectAnimator.setTarget(v)
+                objectAnimator.setEvaluator(ArgbEvaluator())
+                objectAnimator.start()
+            }
+
+        }
 }

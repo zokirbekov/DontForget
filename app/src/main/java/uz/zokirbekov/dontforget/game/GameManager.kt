@@ -153,7 +153,11 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     private fun setTint(imageView: AppCompatImageView,color:Int)
     {
-        var drawable = imageView.background
+        /*if (color == YELLOW_COLOR)
+            animationManager?.animateColor(imageView,false)
+        else
+            animationManager?.animateColor(imageView,true)*/
+        val drawable = imageView.background
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             DrawableCompat.setTint(drawable!!, color)
         }
@@ -183,7 +187,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         {
             for (j in 0..size - 1)
             {
-                var imageView = AppCompatImageView(grid.context)
+                val imageView = AppCompatImageView(grid.context)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     imageView.background = grid.context.getDrawable(R.drawable.round_border_for_game)
                 }
