@@ -16,8 +16,6 @@ import uz.zokirbekov.dontforget.MainActivity
 import uz.zokirbekov.dontforget.R
 import uz.zokirbekov.dontforget.adapters.ScoresAdapter
 import uz.zokirbekov.dontforget.util.ScoreManager
-import android.support.v7.widget.DividerItemDecoration
-
 
 
 class ScoreFragment : Fragment() {

@@ -18,10 +18,25 @@ import uz.zokirbekov.dontforget.game.GameManager
 
 class GameMapFragment : Fragment(), GameListener {
 
+    companion object {
+        val EASY:Int = 4
+        val MEDIUM:Int = 6
+        val HARD:Int = 8
+        fun newInstance(mode:Int) : GameMapFragment
+        {
+            var fragment = GameMapFragment()
+            var bundle = Bundle()
+            bundle.putInt("mode",mode)
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
     @BindView(R.id.grid) lateinit var grid: GridLayout
     @BindView(R.id.textView_score) lateinit var scoreText: TextView
     @BindView(R.id.button_new_game) lateinit var btnNewGame : Button
-
+    private var mode:Int = EASY
+    lateinit var game: GameManager
     override fun onStartGame() {
         btnNewGame.isEnabled = false
     }
@@ -46,13 +61,16 @@ class GameMapFragment : Fragment(), GameListener {
         game.newGame()
     }
 
-    lateinit var game: GameManager
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_game_map, container, false)
         ButterKnife.bind(this,v!!)
-        game = GameManager(5,grid)
+        game = GameManager(mode,grid)
         game.gameListener = this
         return v
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mode = arguments?.getInt("mode", EASY)!!
     }
 }

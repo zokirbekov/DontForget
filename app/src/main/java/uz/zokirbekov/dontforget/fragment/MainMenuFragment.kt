@@ -15,7 +15,7 @@ class MainMenuFragment : Fragment() {
     @OnClick(R.id.button_new_game)
     fun onNewGameClick()
     {
-        (activity as MainActivity).toFragment(GameMapFragment())
+        (activity as MainActivity).toFragment(GameModeFragment())
     }
 
     @OnClick(R.id.button_score)
