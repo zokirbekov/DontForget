@@ -18,7 +18,7 @@ import uz.zokirbekov.dontforget.adapters.ScoresAdapter
 import uz.zokirbekov.dontforget.util.ScoreManager
 
 
-class ScoreFragment : Fragment() {
+class ScoreFragment : BaseFragment() {
 
     @BindView(R.id.listView) lateinit var listView:RecyclerView
 
@@ -26,7 +26,7 @@ class ScoreFragment : Fragment() {
 
     fun backClick()
     {
-        (activity as MainActivity).toFragment(MainMenuFragment())
+        (activity as MainActivity).toFragment(MainMenuFragment(),true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

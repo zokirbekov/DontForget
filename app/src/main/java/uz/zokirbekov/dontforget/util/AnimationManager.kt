@@ -4,7 +4,7 @@ import android.animation.ObjectAnimator
 import android.view.View
 
 class AnimationManager {
-    companion object {
+
         var currentDagree:Float = 0f;
         private val animInterval = 1000L
         private var currentAnimator:ObjectAnimator? = null
@@ -42,6 +42,5 @@ class AnimationManager {
                 }
                 else -> return
             }
-        }
     }
 }

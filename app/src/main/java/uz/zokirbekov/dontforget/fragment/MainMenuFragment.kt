@@ -10,18 +10,22 @@ import butterknife.OnClick
 import uz.zokirbekov.dontforget.MainActivity
 import uz.zokirbekov.dontforget.R
 
-class MainMenuFragment : Fragment() {
+class MainMenuFragment : BaseFragment() {
 
     @OnClick(R.id.button_new_game)
     fun onNewGameClick()
     {
-        (activity as MainActivity).toFragment(GameModeFragment())
+        val fragment = GameModeFragment()
+        fragment.baseFragment = this
+        (activity as MainActivity).toFragment(fragment,false)
     }
 
     @OnClick(R.id.button_score)
     fun onScoreClick()
     {
-        (activity as MainActivity).toFragment(ScoreFragment())
+        val fragment = ScoreFragment()
+        fragment.baseFragment = this
+        (activity as MainActivity).toFragment(fragment,false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

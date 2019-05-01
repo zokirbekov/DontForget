@@ -10,33 +10,38 @@ import butterknife.OnClick
 import uz.zokirbekov.dontforget.MainActivity
 import uz.zokirbekov.dontforget.R
 
-class GameModeFragment : Fragment() {
+class GameModeFragment : BaseFragment() {
 
     @OnClick(R.id.button_easy)
     fun easyClick()
     {
         val fragment = GameMapFragment.newInstance(GameMapFragment.EASY)
-        (activity as MainActivity).toFragment(fragment)
+        fragment.baseFragment = this
+        (activity as MainActivity).toFragment(fragment,false)
     }
 
     @OnClick(R.id.button_medium)
     fun mediumClick()
     {
         val fragment = GameMapFragment.newInstance(GameMapFragment.MEDIUM)
-        (activity as MainActivity).toFragment(fragment)
+        fragment.baseFragment = this
+        (activity as MainActivity).toFragment(fragment,false)
     }
 
     @OnClick(R.id.button_hard)
     fun hardClick()
     {
         val fragment = GameMapFragment.newInstance(GameMapFragment.HARD)
-        (activity as MainActivity).toFragment(fragment)
+        fragment.baseFragment = this
+        (activity as MainActivity).toFragment(fragment,false)
     }
 
     @OnClick(R.id.button_custom)
     fun customClick()
     {
-
+        val fragment = CustomGameFragment()
+        fragment.baseFragment = this
+        (activity as MainActivity).toFragment(fragment,false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

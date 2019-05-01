@@ -21,7 +21,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
     var gameListener:GameListener? = null
     var game:Game? = null
     var mapOfImages:MutableList<MutableList<AppCompatImageView?>>? = null
-
+    var animationManager:AnimationManager? = null
     private var isFirstTime:Boolean = true
     private var clickedCount:Int = 0
     var count:Int = 0
@@ -32,11 +32,11 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
     init {
         game = Game(size)
         mapOfImages = MutableList(size, {MutableList<AppCompatImageView?>(size, { null })})
+        animationManager = AnimationManager()
     }
 
     fun newGame() : GameManager
     {
-        AnimationManager.cancelAnimation()
         game?.initMap(size)
         if (isFirstTime) {
             initImages()
@@ -45,8 +45,8 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
         else
         {
             enableOnClick()
-            allInGray()
         }
+        allInGray()
         gameListener?.onStartGame()
         count = 0
         clickedCount = 0
@@ -101,7 +101,7 @@ class GameManager(val size:Int,var grid: GridLayout) : View.OnClickListener{
 
     fun rotate(toward:Int)
     {
-        AnimationManager.animate(grid,toward)
+        animationManager?.animate(grid,toward)
     }
 
     fun setTagToImages()

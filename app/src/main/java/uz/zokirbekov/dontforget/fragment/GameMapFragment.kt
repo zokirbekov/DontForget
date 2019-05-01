@@ -16,7 +16,7 @@ import uz.zokirbekov.dontforget.R
 import uz.zokirbekov.dontforget.game.GameListener
 import uz.zokirbekov.dontforget.game.GameManager
 
-class GameMapFragment : Fragment(), GameListener {
+class GameMapFragment : BaseFragment(), GameListener {
 
     companion object {
         val EASY:Int = 4
